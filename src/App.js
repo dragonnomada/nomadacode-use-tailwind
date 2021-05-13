@@ -6,7 +6,57 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
 
-// IDEA: Crear botones distintos según el estado de la app
+export default function App() {
+  const [buttonStyle, buttonState] = useTailwind`
+    #base { 
+      rounded 
+      ring 
+      focus:outline-none 
+      px-2 py-1 
+      text-white 
+    }
+
+    @default ~base {
+      bg-purple-500
+      hover:bg-purple-700
+      ring-purple-300
+    }
+
+    @disabled ~base {
+      bg-gray-400
+      ring-gray-100
+      cursor-not-allowed
+    }
+
+    @loading ~base {
+      bg-blue-500
+      hover:bg-blue-700
+      ring-blue-300
+    }
+  `;
+
+  return (
+    <div className="p-8">
+      <div className="p-2">
+        <button className={buttonStyle}>My Button Styled</button>
+      </div>
+
+      <div className="py-4" />
+      <hr className="py-4" />
+
+      <Button color="gray" onClick={() => buttonState("disabled")}>
+        Disabled
+      </Button>
+
+      <Button color="blue" onClick={() => buttonState("loading")}>
+        Loading
+      </Button>
+      <Button color="purple" onClick={() => buttonState("default")}>
+        Default
+      </Button>
+    </div>
+  );
+}
 
 function Button({ color = "blue", children, ...buttonProps }) {
   return (
@@ -98,53 +148,4 @@ function useTailwind(strings, ...parts) {
       setState(state);
     }
   ];
-}
-
-export default function App() {
-  const [buttonStyle, buttonState] = useTailwind`
-    #base { 
-      rounded 
-      ring 
-      focus:outline-none 
-      px-2 py-1 
-      text-white 
-    }
-
-    @default ~base {
-      bg-purple-500
-      hover:bg-purple-700
-      ring-purple-300
-    }
-
-    @disabled ~base {
-      bg-gray-400
-      ring-gray-100
-      cursor-not-allowed
-    }
-
-    @loading ~base {
-      bg-blue-500
-      hover:bg-blue-700
-      ring-blue-300
-    }
-  `;
-
-  return (
-    <div className="p-8">
-      <div className="p-2">
-        <button className={buttonStyle}>My Button Styled</button>
-      </div>
-      <div className="py-4" />
-      <hr className="py-4" />
-      <Button color="gray" onClick={() => buttonState("disabled")}>
-        Disabled
-      </Button>
-      <Button color="blue" onClick={() => buttonState("loading")}>
-        Loading
-      </Button>
-      <Button color="purple" onClick={() => buttonState("default")}>
-        Default
-      </Button>
-    </div>
-  );
 }
